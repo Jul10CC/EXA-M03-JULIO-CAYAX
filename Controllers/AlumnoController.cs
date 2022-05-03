@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EXA_M03_JULIO_CAYAX.Data;
 using EXA_M03_JULIO_CAYAX.Models;
+using EXA_M03_JULIO_CAYAX.Models.DTO;
 
 namespace EXA_M03_JULIO_CAYAX.Controllers
 {
@@ -19,24 +20,54 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
         private Context db = new Context();
 
         // GET: api/Alumno
-        public IQueryable<Alumno> GetAlumnoes()
+        //public IQueryable<Alumno> GetAlumnoes()
+        //{
+        //    return db.Alumnos;
+        //}
+
+        public IQueryable<AlumnoDTO> GetAlumnos()
         {
-            return db.Alumnos;
+            var alumnos = from b in db.Alumnos
+                         select new AlumnoDTO()
+                         {
+                             Id = b.AlumnoId,
+                             Nombre = b.Nombre,
+                             Apellido = b.Apellido,
+                             CursoNombre = b.Curso.Nombre
+                         };
+            return alumnos;
         }
 
         // GET: api/Alumno/5
-        [ResponseType(typeof(Alumno))]
+        //[ResponseType(typeof(Alumno))]
+        //public async Task<IHttpActionResult> GetAlumno(int id)
+        //{
+        //    Alumno alumno = await db.Alumnos.FindAsync(id);
+        //    if (alumno == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(alumno);
+        //}
+        [ResponseType(typeof(AlumnoDetalleDTO))]
         public async Task<IHttpActionResult> GetAlumno(int id)
         {
-            Alumno alumno = await db.Alumnos.FindAsync(id);
-            if (alumno == null)
+            var alumno = await db.Alumnos.Include(b => b.Curso).Select(b => new AlumnoDetalleDTO()
             {
-                return NotFound();
-            }
+                Id = b.AlumnoId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                DPI = b.DPI,
+                Edad = b.Edad,
+                CursoNombre = b.Curso.Nombre,
+                CatedraticoNombre = b.Curso.Catedratico.Nombre
+            }).SingleOrDefaultAsync(b => b.Id == id);
 
+            if (alumno == null)
+                return NotFound();
             return Ok(alumno);
         }
-
         // PUT: api/Alumno/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutAlumno(int id, Alumno alumno)
@@ -80,9 +111,27 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
             {
                 return BadRequest(ModelState);
             }
+            try
+            {
+                db.Alumnos.Add(alumno);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
 
-            db.Alumnos.Add(alumno);
-            await db.SaveChangesAsync();
+                throw;
+            }
+
+            db.Entry(alumno).Reference(b => b.Curso).Load();
+
+            var dto = new AlumnoDTO()
+            {
+                Id = alumno.AlumnoId,
+                Nombre = alumno.Nombre,
+                Apellido = alumno.Apellido,
+                CursoNombre = alumno.Curso.Nombre
+            };
+
 
             return CreatedAtRoute("DefaultApi", new { id = alumno.AlumnoId }, alumno);
         }

@@ -1,7 +1,115 @@
 ﻿<div class="page-header">
-    <h1>Listado Cursos</h1>
+    <h1 style="font-family:verdana; color:darkblue">Sistema de Inscripciones</h1>
 </div>
+<!--Alumnos-->
 <div class="row">
+    <h2>Listado Alumnos</h2>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Alumnos</h2>
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled" data-bind="foreach: alumnos">
+                    <li>
+                        <strong><span data-bind="text: Nombre"></span></strong>
+                        <strong><span data-bind="text: Apellido"></span></strong>
+                        <span data-bind="text: CursoNombre"></span>
+                        <!-Este vincula el controlador de clicks para el elemento a (enlace) a la funcion getLibroDetalle -->
+                        <small><a href="#" data-bind="click: $parent.getAlumnoDetalle">Detalles</a></small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="alert alert-danger" data-bind="visible: error">
+            <p data-bind="text: error"></p>
+        </div>
+    </div>
+
+
+    <!-- ko if:detallealumno() -->
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Detalle del Alumno</h2>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <td>Curso</td>
+                        <td data-bind="text: detallealumno().CursoNombre"></td>
+                    </tr>
+                    <tr>
+                        <td>Catedratico</td>
+                        <td data-bind="text: detallealumno().CatedraticoNombre"></td>
+                    </tr>
+                    <tr>
+                        <td>Nombre</td>
+                        <td data-bind="text: detallealumno().Nombre"></td>
+                    </tr>
+                    <tr>
+                        <td>Apellido</td>
+                        <td data-bind="text: detallealumno().Apellido"></td>
+                    </tr>
+                    <tr>
+                        <td>DPI</td>
+                        <td data-bind="text: detallealumno().DPI"></td>
+                    </tr>
+                    <tr>
+                        <td>Edad</td>
+                        <td data-bind="text: detallealumno().Edad"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Agregar un nuevo Alumno </h2>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" data-bind="submit: agregarAlumno">
+                    <div class="form-group">
+                        <label form="inputCurso" class="col-sm-2 control-label"> Curso: </label>
+                        <div class="col-sm-10">
+                            <!--Los valores de la lista desplegable del autor estan vinculador a los datos self.autores-->
+                            <select data-bind="options: cursos, optionsText: 'Nombre', value: nuevoAlumno.Curso">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-bind="with: nuevoAlumno">
+                        <label for="inputNombre" class="col-md-2 control-label">Nombre:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputNombre" data-bind="value: Nombre">
+                        </div>
+                        <label for="inputApellido" class="col-md-2 control-label">Apellido:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputApellido" data-bind="value: Apellido">
+                        </div>
+                        <label for="inputDPI" class="col-md-2 control-label">DPI: </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputDPI" data-bind="value: DPI">
+                        </div>
+                        <label for="inputEdad" class="col-md-2 control-label">Edad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEdad" data-bind="value: Edad">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Cursos-->
+<div class="row">
+    <h2>Listado Cursos</h2>
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
