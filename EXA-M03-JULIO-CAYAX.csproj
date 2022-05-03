@@ -178,6 +178,10 @@
     <Compile Include="Models\Alumno.cs" />
     <Compile Include="Models\Catedratico.cs" />
     <Compile Include="Models\Curso.cs" />
+    <Compile Include="Models\DTO\AlumnoDetalleDTO.cs" />
+    <Compile Include="Models\DTO\AlumnoDTO.cs" />
+    <Compile Include="Models\DTO\CursoDetalleDTO.cs" />
+    <Compile Include="Models\DTO\CursoDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

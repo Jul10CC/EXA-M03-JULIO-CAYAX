@@ -26,9 +26,9 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
 
         // GET: api/Catedratico/5
         [ResponseType(typeof(Catedratico))]
-        public async Task<IHttpActionResult> GetCatedratico(int id)
+        public IHttpActionResult GetCatedratico(int id)
         {
-            Catedratico catedratico = await db.Catedraticos.FindAsync(id);
+            Catedratico catedratico = db.Catedraticos.Find(id);
             if (catedratico == null)
             {
                 return NotFound();
@@ -39,7 +39,7 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
 
         // PUT: api/Catedratico/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCatedratico(int id, Catedratico catedratico)
+        public IHttpActionResult PutCatedratico(int id, Catedratico catedratico)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,7 +74,7 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
 
         // POST: api/Catedratico
         [ResponseType(typeof(Catedratico))]
-        public async Task<IHttpActionResult> PostCatedratico(Catedratico catedratico)
+        public IHttpActionResult PostCatedratico(Catedratico catedratico)
         {
             if (!ModelState.IsValid)
             {
@@ -82,23 +82,23 @@ namespace EXA_M03_JULIO_CAYAX.Controllers
             }
 
             db.Catedraticos.Add(catedratico);
-            await db.SaveChangesAsync();
+            db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = catedratico.CatedraticoId }, catedratico);
         }
 
         // DELETE: api/Catedratico/5
         [ResponseType(typeof(Catedratico))]
-        public async Task<IHttpActionResult> DeleteCatedratico(int id)
+        public IHttpActionResult DeleteCatedratico(int id)
         {
-            Catedratico catedratico = await db.Catedraticos.FindAsync(id);
+            Catedratico catedratico = db.Catedraticos.Find(id);
             if (catedratico == null)
             {
                 return NotFound();
             }
 
             db.Catedraticos.Remove(catedratico);
-            await db.SaveChangesAsync();
+            db.SaveChangesAsync();
 
             return Ok(catedratico);
         }
